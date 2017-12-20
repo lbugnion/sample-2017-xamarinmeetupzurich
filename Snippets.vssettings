@@ -1,0 +1,144 @@
+<UserSettings><ApplicationIdentity version="15.0"/><ToolsOptions/><Category name="Environment_Group" RegisteredName="Environment_Group"><Category name="Environment_Toolbox" Category="{481999F2-7479-4e03-83D5-BE808BA142DF}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_Toolbox" PackageName="Visual Studio Environment Package"><PropertyValue name="ShowAllTabs">false</PropertyValue><PropertyValue name="Version">1</PropertyValue><PropertyValue name="DeletedTabCount">0</PropertyValue><PropertyValue name="TabCount">0</PropertyValue><PropertyValue name="DeletedItemCount">0</PropertyValue><PropertyValue name="Item0.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item0.ID">CF19EEC5A0589B53E7621793B7EB0B1C</PropertyValue><PropertyValue name="Item0.Name">-- COINVALUE -------------</PropertyValue><PropertyValue name="Item0.UseDefaultName">false</PropertyValue><PropertyValue name="Item0.Tab">General</PropertyValue><PropertyValue name="Item0.TabID">General</PropertyValue><PropertyValue name="Item0.OriginalTabID">General</PropertyValue><PropertyValue name="Item0.OriginalTab">General</PropertyValue><PropertyValue name="Item0.RecordType">1</PropertyValue><PropertyValue name="Item0.Data">        private const string Url = "https://api.coinmarketcap.com/v1/ticker/";
+        public const string ConnectionString = "CONNECTION";
+        public const string TableName = "coins";
+
+</PropertyValue><PropertyValue name="Item0.Position">1</PropertyValue><PropertyValue name="Item1.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item1.ID">CF19EEC5A0589B53E7621793B7EB0B1C</PropertyValue><PropertyValue name="Item1.Name">Constants</PropertyValue><PropertyValue name="Item1.UseDefaultName">true</PropertyValue><PropertyValue name="Item1.Tab">General</PropertyValue><PropertyValue name="Item1.TabID">General</PropertyValue><PropertyValue name="Item1.OriginalTabID">General</PropertyValue><PropertyValue name="Item1.OriginalTab">General</PropertyValue><PropertyValue name="Item1.RecordType">1</PropertyValue><PropertyValue name="Item1.Data">        private const string Url = "https://api.coinmarketcap.com/v1/ticker/";
+        public const string ConnectionString = "CONNECTION";
+        public const string TableName = "coins";
+
+</PropertyValue><PropertyValue name="Item1.Position">2</PropertyValue><PropertyValue name="Item2.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item2.ID">676D4522DCC7E617CEA4CD3D95DB7FC3</PropertyValue><PropertyValue name="Item2.Name">Create</PropertyValue><PropertyValue name="Item2.UseDefaultName">true</PropertyValue><PropertyValue name="Item2.Tab">General</PropertyValue><PropertyValue name="Item2.TabID">General</PropertyValue><PropertyValue name="Item2.OriginalTabID">General</PropertyValue><PropertyValue name="Item2.OriginalTab">General</PropertyValue><PropertyValue name="Item2.RecordType">1</PropertyValue><PropertyValue name="Item2.Data">
+            // Create account, client and table
+            var account = CloudStorageAccount.Parse(ConnectionString);
+            var tableClient = account.CreateCloudTableClient();
+            var table = tableClient.GetTableReference(TableName);
+            await table.CreateIfNotExistsAsync();
+</PropertyValue><PropertyValue name="Item2.Position">3</PropertyValue><PropertyValue name="Item3.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item3.ID">5142863149529D7F9BC59B5BA9E2B8C5</PropertyValue><PropertyValue name="Item3.Name">Get value</PropertyValue><PropertyValue name="Item3.UseDefaultName">true</PropertyValue><PropertyValue name="Item3.Tab">General</PropertyValue><PropertyValue name="Item3.TabID">General</PropertyValue><PropertyValue name="Item3.OriginalTabID">General</PropertyValue><PropertyValue name="Item3.OriginalTab">General</PropertyValue><PropertyValue name="Item3.RecordType">1</PropertyValue><PropertyValue name="Item3.Data">
+            // Get coin value (JSON)
+            var client = new HttpClient();
+            var json = await client.GetStringAsync(Url);
+</PropertyValue><PropertyValue name="Item3.Position">4</PropertyValue><PropertyValue name="Item4.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item4.ID">71F812D123085C8B13EA428D31771F2F</PropertyValue><PropertyValue name="Item4.Name">Parse</PropertyValue><PropertyValue name="Item4.UseDefaultName">true</PropertyValue><PropertyValue name="Item4.Tab">General</PropertyValue><PropertyValue name="Item4.TabID">General</PropertyValue><PropertyValue name="Item4.OriginalTabID">General</PropertyValue><PropertyValue name="Item4.OriginalTab">General</PropertyValue><PropertyValue name="Item4.RecordType">1</PropertyValue><PropertyValue name="Item4.Data">
+            var priceBtc = 0.0;
+            var priceEth = 0.0;
+
+            try
+            {
+                var array = JArray.Parse(json);
+
+                var priceString = array.Children&lt;JObject&gt;()
+                    .FirstOrDefault(c =&gt; c.Property("symbol").Value.ToString().ToLower() == CoinTrend.SymbolBtc)?
+                    .Property("price_usd").Value.ToString();
+
+                if (priceString != null)
+                {
+                    double.TryParse(priceString, out priceBtc);
+                }
+
+                priceString = array.Children&lt;JObject&gt;()
+                    .FirstOrDefault(c =&gt; c.Property("symbol").Value.ToString().ToLower() == CoinTrend.SymbolEth)?
+                    .Property("price_usd").Value.ToString();
+
+                if (priceString != null)
+                {
+                    double.TryParse(priceString, out priceEth);
+                }
+            }
+            catch
+            {
+                // Do nothing here for demo purposes
+            }
+
+            if (priceBtc &lt; 0.1
+                || priceEth &lt; 0.1)
+            {
+                log.Info("Something went wrong");
+                return; // Do some logging here
+            }
+</PropertyValue><PropertyValue name="Item4.Position">5</PropertyValue><PropertyValue name="Item5.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item5.ID">CB16B635FBE80006C67E767482F2260E</PropertyValue><PropertyValue name="Item5.Name">Create and insert</PropertyValue><PropertyValue name="Item5.UseDefaultName">true</PropertyValue><PropertyValue name="Item5.Tab">General</PropertyValue><PropertyValue name="Item5.TabID">General</PropertyValue><PropertyValue name="Item5.OriginalTabID">General</PropertyValue><PropertyValue name="Item5.OriginalTab">General</PropertyValue><PropertyValue name="Item5.RecordType">1</PropertyValue><PropertyValue name="Item5.Data">
+            var coinBtc = new CoinEntity
+            {
+                Symbol = CoinTrend.SymbolBtc,
+                TimeOfReading = DateTime.Now,
+                RowKey = "rowBtc" + DateTime.Now.Ticks,
+                PartitionKey = "partition",
+                PriceUsd = priceBtc
+            };
+
+            // Insert new value in table
+            table.Execute(TableOperation.Insert(coinBtc));
+
+            var coinEth = new CoinEntity
+            {
+                Symbol = CoinTrend.SymbolEth,
+                TimeOfReading = DateTime.Now,
+                RowKey = "rowEth" + DateTime.Now.Ticks,
+                PartitionKey = "partition",
+                PriceUsd = priceEth
+            };
+
+            // Insert new value in table
+            table.Execute(TableOperation.Insert(coinEth));
+</PropertyValue><PropertyValue name="Item5.Position">6</PropertyValue><PropertyValue name="Item6.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item6.ID">C8FD20A4764C543EB2BD6510539EEFFC</PropertyValue><PropertyValue name="Item6.Name">Send notification Droid</PropertyValue><PropertyValue name="Item6.UseDefaultName">true</PropertyValue><PropertyValue name="Item6.Tab">General</PropertyValue><PropertyValue name="Item6.TabID">General</PropertyValue><PropertyValue name="Item6.OriginalTabID">General</PropertyValue><PropertyValue name="Item6.OriginalTab">General</PropertyValue><PropertyValue name="Item6.RecordType">1</PropertyValue><PropertyValue name="Item6.Data">
+            // Send notification to devices
+            const string uriAndroid = "https://api.mobile.azure.com/v0.1/apps/lbugnion/CoinValue.Android/push/notifications";
+            const string uriUwp = "https://api.mobile.azure.com/v0.1/apps/lbugnion/CoinValue.UWP/push/notifications";
+            const string ApiToken = "b19f8321553f324acc49544b5179c44f9e738680";
+
+            var notification = $"{{\"notification_content\":{{\"name\":\"CoinValue\",\"title\":\"New values saved\",\"body\": \"Btc: {priceBtc} U$ | Eth: {priceEth} U$\"}}}}";
+
+            var request1 = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(uriAndroid),
+                Method = HttpMethod.Post,
+                Content = new StringContent(
+                    notification,
+                    Encoding.UTF8,
+                    "application/json")
+            };
+
+            request1.Headers.Add("X-API-Token", ApiToken);
+
+            var response = await client.SendAsync(request1);
+            if (response.StatusCode != System.Net.HttpStatusCode.Accepted)
+            {
+                log.Error("Error posting the push notification to Android");
+            }
+</PropertyValue><PropertyValue name="Item6.Position">7</PropertyValue><PropertyValue name="Item7.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item7.ID">2D84DF8547B33D3084A1A802F945E1A5</PropertyValue><PropertyValue name="Item7.Name">Send notification UWP</PropertyValue><PropertyValue name="Item7.UseDefaultName">true</PropertyValue><PropertyValue name="Item7.Tab">General</PropertyValue><PropertyValue name="Item7.TabID">General</PropertyValue><PropertyValue name="Item7.OriginalTabID">General</PropertyValue><PropertyValue name="Item7.OriginalTab">General</PropertyValue><PropertyValue name="Item7.RecordType">1</PropertyValue><PropertyValue name="Item7.Data">
+            var request2 = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(uriUwp),
+                Method = HttpMethod.Post,
+                Content = new StringContent(
+                    notification,
+                    Encoding.UTF8,
+                    "application/json")
+            };
+
+            request2.Headers.Add("X-API-Token", ApiToken);
+
+            response = await client.SendAsync(request2);
+
+            if (response.StatusCode != System.Net.HttpStatusCode.Accepted)
+            {
+                log.Error("Error posting the push notification to UWP");
+            }
+</PropertyValue><PropertyValue name="Item7.Position">8</PropertyValue><PropertyValue name="Item8.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item8.ID">CF19EEC5A0589B53E7621793B7EB0B1C</PropertyValue><PropertyValue name="Item8.Name">-- LIVE PLAYER -------------</PropertyValue><PropertyValue name="Item8.UseDefaultName">false</PropertyValue><PropertyValue name="Item8.Tab">General</PropertyValue><PropertyValue name="Item8.TabID">General</PropertyValue><PropertyValue name="Item8.OriginalTabID">General</PropertyValue><PropertyValue name="Item8.OriginalTab">General</PropertyValue><PropertyValue name="Item8.RecordType">1</PropertyValue><PropertyValue name="Item8.Data">        private const string Url = "https://api.coinmarketcap.com/v1/ticker/";
+        public const string ConnectionString = "CONNECTION";
+        public const string TableName = "coins";
+
+</PropertyValue><PropertyValue name="Item8.Position">9</PropertyValue><PropertyValue name="Item9.DataProvider">{0A057BAD-6706-45D2-A800-683A29EC6BA3}</PropertyValue><PropertyValue name="Item9.ID">1A4E914DDFE125DE0AAA6A048D73849A</PropertyValue><PropertyValue name="Item9.Name">XAML</PropertyValue><PropertyValue name="Item9.UseDefaultName">false</PropertyValue><PropertyValue name="Item9.Tab">General</PropertyValue><PropertyValue name="Item9.TabID">General</PropertyValue><PropertyValue name="Item9.OriginalTabID">General</PropertyValue><PropertyValue name="Item9.OriginalTab">General</PropertyValue><PropertyValue name="Item9.RecordType">1</PropertyValue><PropertyValue name="Item9.Data">        
+        &lt;Grid BackgroundColor="Red"&gt;
+            &lt;Grid.RowDefinitions&gt;
+                &lt;RowDefinition Height="Auto" /&gt;
+                &lt;RowDefinition Height="Auto" /&gt;
+            &lt;/Grid.RowDefinitions&gt;
+
+            &lt;Image Source="xamarin_logo.png"
+                    Margin="12,36,0,10"
+                    HorizontalOptions="Start"/&gt;
+
+            &lt;Label Grid.Row="1"
+                    Margin="12,0,0,10"
+                    Text="Hello Xamarin.Forms"
+                    FontSize="Large" /&gt;
+        &lt;/Grid&gt;            
+</PropertyValue><PropertyValue name="Item9.Position">10</PropertyValue><PropertyValue name="ItemCount">10</PropertyValue></Category></Category></UserSettings>
