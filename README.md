@@ -1,12 +1,12 @@
-# Microsoft TechSummit, Toronto
+# Get inspired for your Xamarin Christmas Project
 
-My code samples for the Microsoft TechSummit 2017 conference in Toronto, Canada.
+My code samples for the Xamarin Meetup in Zurich, Switzerland, December 2017.
 
 # Presentation details, Slides
 
 You can see the details and the slides here:
 
-http://www.galasoft.ch/presentations/2017023
+http://www.galasoft.ch/presentations/2017024
 
 # Content
 
